@@ -32,6 +32,10 @@ local cargo_metadata = setmetatable({}, {
     end,
 })
 
+function string:endswith(suffix)
+    return self:sub(-#suffix) == suffix
+end
+
 ---Find the project root directory given a current directory to work from.
 ---Should no root be found, the adapter can still be used in a non-project context if a test file matches.
 ---@async
@@ -383,6 +387,12 @@ function adapter.results(spec, result, tree)
                     results[testcase._attr.name] = {
                         status = "passed",
                     }
+                end
+
+                local name_list = vim.split(testcase._attr.name, "::")
+                if not name_list[1]:endswith("_test") then
+                    table.remove(name_list, 1)
+                    results[table.concat(name_list, "::")] = results[testcase._attr.name]
                 end
             end
         end
