@@ -260,7 +260,7 @@ function adapter.build_spec(args)
     if position.type == "test" then
         position_id = position.id
         -- TODO: Support rstest parametrized tests
-        test_filter = "-E '" .. package_filter .. "test(/^" .. position_id .. "$/)'"
+        test_filter = "-E '" .. package_filter .. "test(/" .. position_id .. "$/)'"
     elseif position.type == "file" then
         if package_name then
             -- A basic filter to run tests within the package that will be
@@ -277,7 +277,7 @@ function adapter.build_spec(args)
 
         if position_id then
             -- Either a unit test or an integration test in a subdirectory
-            test_filter = "-E '" .. package_filter .. "test(/^" .. position_id .. "::/)'"
+            test_filter = "-E '" .. package_filter .. "test(/" .. position_id .. "::/)'"
         end
     end
     table.insert(command, test_filter)
